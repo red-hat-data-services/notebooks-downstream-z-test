@@ -12,6 +12,10 @@ LABEL name="odh-notebook-base-ubi8-python-3.8" \
 
 WORKDIR /opt/app-root/bin
 
+USER root
+RUN dnf update -y libnghttp2 && dnf clean all
+USER 1001
+
 # Install Python dependencies from requirements.txt file
 COPY requirements.txt ./
 
