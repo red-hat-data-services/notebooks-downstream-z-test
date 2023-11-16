@@ -3,7 +3,7 @@
     "metadata": {
         "tags": ["tensorflow","runtime-cuda-tensorflow-ubi9-python-3.9-2023b-20231110-865fe76"],
         "display_name": "TensorFlow with CUDA and Python 3.9 (UBI9)",
-        "image_name": "quay.io/modh/runtime-images@sha256:1f369ade72a79b24b500aaddd601cc57f7ab12638af0aae5678a13851801e201",
+        "image_name": "quay.io/modh/runtime-images@sha256:647c65023e62f292161640e6420d564ac618ed441b5b542e6fd7d81497e5f28a",
         "pull_policy": "IfNotPresent"
     },
     "schema_name": "runtime-image"
