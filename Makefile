@@ -187,6 +187,9 @@ runtime-cuda-tensorflow-ubi9-python-3.9: cuda-ubi9-python-3.9
 codeserver-ubi9-python-3.9: base-ubi9-python-3.9
 	$(call image,$@,codeserver/ubi9-python-3.9,$<)
 
+.PHONY: codeserver-ubi9-python-3.9-db-clients
+codeserver-ubi9-python-3.9-db-clients: codeserver-ubi9-python-3.9
+	$(call image,$@,codeserver/ubi9-python-3.9-db-clients,$<)
 
 ####################################### Buildchain for Python 3.9 using C9S #######################################
 
