@@ -1,9 +1,9 @@
 {
     "display_name": "Python 3.8 (UBI8)",
     "metadata": {
-        "tags": [],
+        "tags": ["minimal"],
         "display_name": "Python 3.8 (UBI8)",
-        "image_name": "quay.io/modh/runtime-images@sha256:a3ee8b8eff99e9699fba1c1a51a9eedc4499caceeb4106e708da048ea0c30ef3",
+        "image_name": "quay.io/modh/runtime-images@sha256:d48aa3d8afa03eed988f7cedc93a8730a0406119a6298fad108c65d531902417",
         "pull_policy": "IfNotPresent"
     },
     "schema_name": "runtime-image"
