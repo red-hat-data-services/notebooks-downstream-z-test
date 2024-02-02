@@ -1,9 +1,9 @@
 {
     "display_name": "Datascience with Python 3.8 (UBI8)",
     "metadata": {
-        "tags": [],
+        "tags": ["datascience"],
         "display_name": "Datascience with Python 3.8 (UBI8)",
-        "image_name": "quay.io/modh/runtime-images@sha256:d9cd06ab0f6ec763a11c602ed4482944700fc4a96c062066408686703e5327f5",
+        "image_name": "quay.io/modh/runtime-images@sha256:e1b4351fa6b92d03546eea3e90ad4b71e9f8337f7e5bca82ff92814af3d6ad21",
         "pull_policy": "IfNotPresent"
     },
     "schema_name": "runtime-image"

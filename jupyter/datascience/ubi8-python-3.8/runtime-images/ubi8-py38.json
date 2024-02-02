@@ -3,7 +3,7 @@
     "metadata": {
         "tags": ["minimal"],
         "display_name": "Python 3.8 (UBI8)",
-        "image_name": "quay.io/modh/runtime-images@sha256:7f6a9cbfbd963eb2713cc752f329ed1bba30108c3eb65d140b3827521de4f56f",
+        "image_name": "quay.io/modh/runtime-images@sha256:d48aa3d8afa03eed988f7cedc93a8730a0406119a6298fad108c65d531902417",
         "pull_policy": "IfNotPresent"
     },
     "schema_name": "runtime-image"
