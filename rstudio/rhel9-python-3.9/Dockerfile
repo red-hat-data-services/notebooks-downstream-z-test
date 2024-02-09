@@ -2,17 +2,15 @@ ARG BASE_IMAGE
 FROM ${BASE_IMAGE}
 
 # Access the client's secret for the subscription manager from the environment variable
-ENV USERNAME=$USERNAME
-ENV PASSWORD=$PASSWORD
-# These should be removed after testing the recipe
-ENV SERVERURL=$SERVERURL
-ENV BASEURL=$BASEURL
+ARG SECRET_DIR=/opt/app-root/src/.sec
+ARG SERVERURL_DEFAULT=""
+ARG BASEURL_DEFAULT=""
 
-LABEL name="odh-notebook-rstudio-rhel9-python-3.9" \
-      summary="R Studio image with python 3.9 based on Red Hat Enterprise Linux 9" \
-      description="Code Server (VS Code) image with python 3.9 based on Red Hat Enterprise Linux 9" \
-      io.k9s.display-name="R Studio image with python 3.9 based on Red Hat Enterprise Linux 9" \
-      io.k9s.description="R Studio image with python 3.9 based on Red Hat Enterprise Linux 9" \
+LABEL name="odh-notebook-rstudio-server-rhel9-python-3.9" \
+      summary="RStudio Server image with python 3.9 based on Red Hat Enterprise Linux 9" \
+      description="RStudio Server image with python 3.9 based on Red Hat Enterprise Linux 9" \
+      io.k9s.display-name="RStudio Server image with python 3.9 based on Red Hat Enterprise Linux 9" \
+      io.k9s.description="RStudio Server image with python 3.9 based on Red Hat Enterprise Linux 9" \
       authoritative-source-url="https://github.com/opendatahub-io/notebooks" \
       io.openshift.build.commit.ref="main" \
       io.openshift.build.source-location="https://github.com/opendatahub-io/notebooks/tree/main/rstudio/rhel9-python-3.9" \
@@ -24,7 +22,11 @@ USER root
 #RUN sed -i 's/\(def in_container():\)/\1\n    return False/g' /usr/lib64/python*/*-packages/rhsm/config.py
 
 # Run the subscription manager command using the provided credentials. Only include --serverurl and --baseurl if they are provided
-RUN subscription-manager register \
+RUN SERVERURL=$(cat ${SECRET_DIR}/SERVERURL 2>/dev/null || echo ${SERVERURL_DEFAULT}) && \
+    BASEURL=$(cat ${SECRET_DIR}/BASEURL 2>/dev/null || echo ${BASEURL_DEFAULT}) && \
+    USERNAME=$(cat ${SECRET_DIR}/USERNAME) && \
+    PASSWORD=$(cat ${SECRET_DIR}/PASSWORD) && \
+    subscription-manager register \
     ${SERVERURL:+--serverurl=$SERVERURL} \
     ${BASEURL:+--baseurl=$BASEURL} \
     --username=$USERNAME \
