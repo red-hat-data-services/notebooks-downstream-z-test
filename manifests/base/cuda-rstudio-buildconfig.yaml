@@ -70,12 +70,12 @@ spec:
       name: "cuda-rhel9:latest"
   resources:
     limits:
-      cpu: "1"
+      cpu: 1
       memory: 4Gi
     requests:
-      cpu: "1"
+      cpu: 1
       memory: 4Gi
-      ephemeral-storage: 8Gi
+      ephemeral-storage: 50Gi
   successfulBuildsHistoryLimit: 2
   failedBuildsHistoryLimit: 2
   runPolicy: Serial
@@ -119,13 +119,12 @@ spec:
       name: "cuda-rstudio-rhel9:latest"
   resources:
     limits:
-      cpu: "1500m"
+      cpu: 2
       memory: 4Gi
-      ephemeral-storage: 8Gi
     requests:
-      cpu: "1500m"
+      cpu: 2
       memory: 4Gi
-      ephemeral-storage: 8Gi
+      ephemeral-storage: 50Gi
   successfulBuildsHistoryLimit: 2
   failedBuildsHistoryLimit: 2
   runPolicy: Serial
