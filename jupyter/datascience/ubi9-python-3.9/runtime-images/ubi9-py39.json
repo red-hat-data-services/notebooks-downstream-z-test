@@ -1,10 +1,10 @@
 {
+  "display_name": "Python 3.9 (UBI9)",
+  "metadata": {
+    "tags": ["minimal"],
     "display_name": "Python 3.9 (UBI9)",
-    "metadata": {
-        "tags": ["minimal"],
-        "display_name": "Python 3.9 (UBI9)",
-        "image_name": "quay.io/modh/runtime-images@sha256:f918ab84601320b179ad80960f06d01e89030fc9daea06b6e7679da08883c590",
-        "pull_policy": "IfNotPresent"
-    },
-    "schema_name": "runtime-image"
+    "image_name": "quay.io/modh/runtime-images@sha256:b0045dc104587a6c6d5689db83c2fd4f4eac5c863969eafd7fae418316b69df1",
+    "pull_policy": "IfNotPresent"
+  },
+  "schema_name": "runtime-image"
 }

@@ -1,10 +1,10 @@
 {
+  "display_name": "Pytorch with CUDA and Python 3.8 (UBI8)",
+  "metadata": {
+    "tags": ["pytorch"],
     "display_name": "Pytorch with CUDA and Python 3.8 (UBI8)",
-    "metadata": {
-        "tags": ["pytorch"],
-        "display_name": "Pytorch with CUDA and Python 3.8 (UBI8)",
-        "image_name": "quay.io/modh/runtime-images@sha256:2a9be55d577a3b2ab50f0505ed096896cc3b914e732850fd5d5f733a79a000b8",
-        "pull_policy": "IfNotPresent"
-    },
-    "schema_name": "runtime-image"
+    "image_name": "quay.io/modh/runtime-images@sha256:60f79be28b0b01b09cec7d4a6c28edd9eae4d76784855a6f6006e31f2c1b21ff",
+    "pull_policy": "IfNotPresent"
+  },
+  "schema_name": "runtime-image"
 }
