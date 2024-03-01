@@ -1,10 +1,10 @@
 {
   "display_name": "Datascience with Python 3.9 (UBI9)",
   "metadata": {
-      "tags": ["datascience"],
-      "display_name": "Datascience with Python 3.9 (UBI9)",
-      "image_name": "quay.io/modh/runtime-images@sha256:f7256f8a2005a161d8a9b641fa2a8f2154f7c767a92fb83d858177441cf00b46",
-      "pull_policy": "IfNotPresent"
+    "tags": ["datascience"],
+    "display_name": "Datascience with Python 3.9 (UBI9)",
+    "image_name": "quay.io/modh/runtime-images@sha256:e0d97147aa6ea050cea12b9759faf4c0e537b043b652cab4ffddc5c2caac23cc",
+    "pull_policy": "IfNotPresent"
   },
   "schema_name": "runtime-image"
 }
