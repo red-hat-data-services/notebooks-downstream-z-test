@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "430a4329ea5936abfebb45df7595e298b0c9a051a7839d30df076d4332aa682d"
+            "sha256": "b0a025a0f140b117275b4d82c112b410c45363d214f3dc407777c64425590bc4"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -551,11 +551,11 @@
         },
         "codeflare-sdk": {
             "hashes": [
-                "sha256:93e9f3e0324eb3d2f787da05db4875b23dcc59834a8950c2f79d29758d07835f",
-                "sha256:e9c3c9fb0d34df1a5a06038ab00fe0480c44f2f20686d54df6c5e1ef067a5a47"
+                "sha256:4379412625fff9c58ff521a0036b4f98a07db641cee752cdfb031153b4ece3d3",
+                "sha256:9efaa7f50397a862126cac4678fb5ef24667346f90085c7d8d151d37850185fd"
             ],
             "index": "pypi",
-            "version": "==0.14.1"
+            "version": "==0.15.0"
         },
         "codeflare-torchx": {
             "hashes": [
