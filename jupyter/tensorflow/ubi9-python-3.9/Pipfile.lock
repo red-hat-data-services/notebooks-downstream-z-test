@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "c79410e0b1deba0d38a4abe83dc6573238997bc3b341ab6f9cf2a093449ed129"
+            "sha256": "67fec46dbf33938599b452cc42c0ffc4ad0e1aa80eea53c389db3681896d8133"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -29,7 +29,7 @@
                 "sha256:1142fa8e80dbae46bb6339573ad4c8c0841358f79c6eb50a493dceca14621bad",
                 "sha256:9107f1ca0b2a5553987a94a3c9959fe5b491fdf731389aa5b7b1bd0733e32de6"
             ],
-            "markers": "python_version >= '3.7' and python_full_version < '4.0.0'",
+            "markers": "python_version >= '3.7' and python_version < '4.0'",
             "version": "==22.1.0"
         },
         "aiohttp": {
@@ -149,7 +149,7 @@
                 "sha256:0fca07b290282b9449590cbdb39b3461c45f2b6037523949f028ff2cba82c85e",
                 "sha256:c2aec138a24f8462d6199c65666590dab14acb18af6c62950c82bc8d40862558"
             ],
-            "markers": "python_version >= '3.6' and python_full_version < '4.0.0'",
+            "markers": "python_version >= '3.6' and python_version < '4.0'",
             "version": "==1.1.6"
         },
         "argon2-cffi": {
@@ -2240,11 +2240,11 @@
         },
         "odh-elyra": {
             "hashes": [
-                "sha256:16c95c83281b3a11811d3c2477a554f0d2f6bdf376d8b8bb9cdef72591cf63f0",
-                "sha256:8b55fd03dcbce00dcd2dc92fe36b709bf69c9511cf28998b7078a547323cf91f"
+                "sha256:7e32cc5bc713ad6ca4789cea4e26ebe08f395d91403c55fb46003874841c98e5",
+                "sha256:cd18387bbe02d15fe2d7d485111df0f0abfbf2d9e0c9585fe9118946f24064ae"
             ],
             "index": "pypi",
-            "version": "==3.16.3"
+            "version": "==3.16.4"
         },
         "onnx": {
             "hashes": [
@@ -3254,7 +3254,7 @@
                 "sha256:a4eb26484f2c82589bd9a17c73d32a010b1e29d89f1604cd9bf3a2097b81bb5e",
                 "sha256:ba3a3775974105c221d31141f2c116f4fd65c5ceb0698657a11e9f295ec93fd0"
             ],
-            "markers": "python_full_version >= '3.6.3' and python_full_version < '4.0.0'",
+            "markers": "python_full_version >= '3.6.3' and python_version < '4.0'",
             "version": "==12.6.0"
         },
         "rope": {
@@ -3374,7 +3374,7 @@
                 "sha256:90260d9058e514786967344d0ef75fa8727eed8a7d2e43ce9f4bcf1b536174f7",
                 "sha256:e38464a49c6c85d7f1351b0126661487a7e0a14a50f1675ec50eb34d4f20ef21"
             ],
-            "markers": "python_version >= '3.6' and python_full_version < '4.0.0'",
+            "markers": "python_version >= '3.6' and python_version < '4.0'",
             "version": "==4.9"
         },
         "ruamel.yaml": {
@@ -4245,7 +4245,7 @@
                 "sha256:35cae59c682506794a218310445e8326cd8fec410879d1c44953b494b1121e77",
                 "sha256:5c9b6549b84c8aa7f92426272b670e1302941d72f0275caf32d2ea7db3c269f9"
             ],
-            "markers": "python_version >= '3.9' and python_full_version < '4.0.0'",
+            "markers": "python_version >= '3.9' and python_version < '4.0'",
             "version": "==3.0.2"
         },
         "ypy-websocket": {

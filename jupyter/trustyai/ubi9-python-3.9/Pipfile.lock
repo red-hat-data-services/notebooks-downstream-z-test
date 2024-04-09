@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "03b37a9487e8e3e9f73b97d4b44d67871e0a93fdd37cbff3c09ca039227f81de"
+            "sha256": "3b61ed5e977633ed8b26eb482814ccc3bb69cee8274808ce86938d69f89e7a55"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -2134,11 +2134,11 @@
         },
         "odh-elyra": {
             "hashes": [
-                "sha256:16c95c83281b3a11811d3c2477a554f0d2f6bdf376d8b8bb9cdef72591cf63f0",
-                "sha256:8b55fd03dcbce00dcd2dc92fe36b709bf69c9511cf28998b7078a547323cf91f"
+                "sha256:7e32cc5bc713ad6ca4789cea4e26ebe08f395d91403c55fb46003874841c98e5",
+                "sha256:cd18387bbe02d15fe2d7d485111df0f0abfbf2d9e0c9585fe9118946f24064ae"
             ],
             "index": "pypi",
-            "version": "==3.16.3"
+            "version": "==3.16.4"
         },
         "onnx": {
             "hashes": [
