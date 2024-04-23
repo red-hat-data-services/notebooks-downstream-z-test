@@ -5,7 +5,7 @@
       "datascience"
     ],
     "display_name": "Datascience with Python 3.8 (UBI8)",
-    "image_name": "quay.io/modh/runtime-images@sha256:a02b8d2682a53b6d755a563efc69cbe1e596d53d3f526c27bb717574790a2877",
+    "image_name": "quay.io/modh/runtime-images@sha256:3204d5a0ea50a0498222b25995098c68e961f6fc2bd36be0f994f9477b107459",
     "pull_policy": "IfNotPresent"
   },
   "schema_name": "runtime-image"
