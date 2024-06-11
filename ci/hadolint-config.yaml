@@ -34,3 +34,11 @@ ignored:
   - SC2046
   # SC2140 warning: Word is of the form "A"B"C" (B indicated). Did you mean "ABC" or "A\"B\"C"?
   - SC2140
+  # DL3042 warning: Avoid use of cache directory with pip. Use `pip install --no-cache-dir <package>`
+  - DL3042
+  # DL3040 warning: `dnf clean all` missing after dnf command.
+  - DL3040
+  # DL3047 info: Avoid use of wget without progress bar. Use `wget --progress=dot:giga <url>`. Or consider using `-q` or `-nv` (shorthands for `--quiet` or `--no-verbose`).
+  - DL3047
+  # DL3025 warning: Use arguments JSON notation for CMD and ENTRYPOINT arguments
+  - DL3025
