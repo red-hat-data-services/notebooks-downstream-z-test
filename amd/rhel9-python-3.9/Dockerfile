@@ -1,4 +1,4 @@
-FROM registry.redhat.io/rhel9/python-39:latest
+FROM registry.access.redhat.com/ubi9/python-39:latest
 
 LABEL name="odh-notebook-rocm-python-3.9" \
       summary="ROCm Python 3.9 base image for ODH notebooks" \
