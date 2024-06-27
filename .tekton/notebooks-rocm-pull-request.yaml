@@ -7,6 +7,7 @@ metadata:
     build.appstudio.redhat.com/pull_request_number: '{{pull_request_number}}'
     build.appstudio.redhat.com/target_branch: '{{target_branch}}'
     pipelinesascode.tekton.dev/max-keep-runs: "3"
+    pipelinesascode.tekton.dev/task: tasks/generate-odcs-compose/0.1/generate-odcs-compose.yaml
     pipelinesascode.tekton.dev/on-cel-expression: |
       event == "pull_request"
       && target_branch == "konflux-poc"
@@ -143,6 +144,56 @@ spec:
       name: JAVA_COMMUNITY_DEPENDENCIES
       value: $(tasks.build-container.results.JAVA_COMMUNITY_DEPENDENCIES)
     tasks:
+    - name: prep-inputs
+      workspaces:
+        - name: workdir
+      taskSpec:
+        workspaces:
+          - name: workdir
+            description: \
+              Working directory that will be used for reading configuration
+              files and writing the output
+        steps:
+          - name: generate-inputs
+            image: registry.access.redhat.com/ubi9/ubi-minimal:9.2-750.1697625013
+            script: |
+              #!/bin/bash
+              set -ex
+
+              tee -a "$(workspaces.workdir.path)"/compose_inputs.yaml << END
+              composes:
+                - kind: ComposeSourceModule
+                  spec:
+                    modules:
+                      - squid:4:8090020231130092412:a75119d5
+                  additional_args: {}
+              END
+    - name: generate-odcs-compose
+      runAfter: [prep-inputs]
+      workspaces:
+        - name: workdir
+      taskRef:
+        name: generate-odcs-compose
+        kind: Task
+    - name: check-results
+      runAfter: [generate-odcs-compose]
+      workspaces:
+        - name: workdir
+      taskSpec:
+        workspaces:
+          - name: workdir
+            description: \
+              Working directory that will be used for reading configuration
+              files and writing the output
+        steps:
+          - name: check-results
+            image: registry.access.redhat.com/ubi9/ubi-minimal:9.2-750.1697625013
+            script: |
+              #!/bin/bash
+              set -ex
+
+              cat $(workspaces.workdir.path)/repos/*
+              echo "TODO: verify output"
     - name: init
       params:
       - name: image-url
