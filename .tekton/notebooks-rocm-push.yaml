@@ -18,6 +18,7 @@ metadata:
     pipelines.appstudio.openshift.io/type: build
   name: notebooks-rocm-on-push
   namespace: rhoai-tenant
+#test
 spec:
   params:
   - name: git-url
