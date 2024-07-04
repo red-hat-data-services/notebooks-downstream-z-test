@@ -27,9 +27,11 @@ RUN yum -y install git java-1.8.0-openjdk && \
 
 # Install ROCm AMD from:
 # https://github.com/ROCm/ROCm-docker/blob/master/dev/Dockerfile-RHEL-7-complete
-# Enable epel-release repositories
+
+# Enable epel-release repositories and update package lists
 RUN yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm && \
-    yum -y install bc bridge-utils glibc.i686 \
+    yum update -y && \
+    yum install -y bc bridge-utils glibc.i686 \
     numactl-libs libssh libunwind-devel \
     libunwind pciutils pciutils-libs \
     re2c doxygen elfutils-libelf-devel \
@@ -37,6 +39,7 @@ RUN yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.n
     qemu-kvm subversion dkms dpkg \
     dpkg-dev dpkg-perl fakeroot mesa-libGL && \
     yum clean all && rm -rf /var/cache/yum
+
 
 
 # Install rocm and amdgpu binaries 
