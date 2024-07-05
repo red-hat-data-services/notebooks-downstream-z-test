@@ -6,7 +6,6 @@ metadata:
     build.appstudio.redhat.com/commit_sha: '{{revision}}'
     build.appstudio.redhat.com/target_branch: '{{target_branch}}'
     pipelinesascode.tekton.dev/max-keep-runs: "3"
-    pipelinesascode.tekton.dev/task: tasks/generate-odcs-compose/0.1/generate-odcs-compose.yaml
     pipelinesascode.tekton.dev/on-cel-expression: event == "push" && target_branch
       == "konflux-poc"
   creationTimestamp: null
@@ -168,9 +167,20 @@ spec:
       runAfter: [prep-inputs]
       workspaces:
         - name: workdir
+      params: 
+      - name: COMPOSE_INPUTS
+        value: amd/rhel9-python-3.9/compose_inputs.yaml
+      - name: COMPOSE_OUTPUTS
+        value: amd/rhel9-python-3.9
       taskRef:
-        name: generate-odcs-compose
-        kind: Task
+        params:
+        - name: name
+          value: generate-odcs-compose
+        - name: bundle
+          value: quay.io/konflux-ci/tekton-catalog/task-generate-odcs-compose:0.1@sha256:e56f6043d109766e3cad5a36c8475d09a97a9f8e20ba9ca6c72693768ad7b5af
+        - name: kind
+          value: task
+        resolver: bundles
     - name: check-results
       runAfter: [generate-odcs-compose]
       workspaces:
