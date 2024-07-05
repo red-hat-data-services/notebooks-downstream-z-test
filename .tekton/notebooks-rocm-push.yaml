@@ -28,12 +28,6 @@ spec:
     value: ./amd/rhel9-python-3.9/Dockerfile
   - name: path-context
     value: amd/rhel9-python-3.9
-  - name: COMPOSE_INPUTS
-    description: relative path from workdir workspace to the compose inputs file
-    default: amd/rhel9-python-3.9/compose_inputs.yaml
-  - name: COMPOSE_OUTPUTS
-    description: relative path from workdir workspace to store compose output files
-    default: amd/rhel9-python-3.9
   pipelineSpec:
     finally:
     - name: show-sbom
@@ -173,12 +167,17 @@ spec:
       runAfter: [prep-inputs]
       workspaces:
         - name: workdir
+      params: 
+        - name: COMPOSE_INPUTS
+          value: amd/rhel9-python-3.9/compose_inputs.yaml
+        - name: COMPOSE_OUTPUTS
+          value: amd/rhel9-python-3.9
       taskRef:
         params:
-        - name: generate-odcs-compose
-          value: buildah
+        - name: name
+          value: generate-odcs-compose
         - name: bundle
-          value: http://quay.io/konflux-ci/tekton-catalog/task-generate-odcs-compose:0.1@sha256:e56f6043d109766e3cad5a36c8475d09a97a9f8e20ba9ca6c72693768ad7b5af
+          value: quay.io/konflux-ci/tekton-catalog/task-generate-odcs-compose:0.1@sha256:e56f6043d109766e3cad5a36c8475d09a97a9f8e20ba9ca6c72693768ad7b5af
         - name: kind
           value: task
         resolver: bundles
