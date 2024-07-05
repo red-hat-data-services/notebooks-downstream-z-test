@@ -142,6 +142,7 @@ spec:
     - name: prep-inputs
       workspaces:
         - name: workdir
+          workspace: workspace
       taskSpec:
         workspaces:
           - name: workdir
