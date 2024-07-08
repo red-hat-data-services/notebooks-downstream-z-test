@@ -65,7 +65,7 @@ spec:
         resolver: bundles
       workspaces:
       - name: workspace
-        workspace: workspace
+        workspace: workdir
     params:
     - description: Source Repository URL
       name: git-url
