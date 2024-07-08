@@ -187,6 +187,7 @@ spec:
       runAfter: [generate-odcs-compose]
       workspaces:
         - name: workdir
+          workspace: workdir
       taskSpec:
         workspaces:
           - name: workdir
