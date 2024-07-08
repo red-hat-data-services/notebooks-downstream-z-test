@@ -1,5 +1,7 @@
 FROM registry.access.redhat.com/ubi9/python-39:latest
 
+RUN dnf install -y --enablerepo codeready-builder-for-rhel-8-x86_64-rpms re2c
+
 LABEL name="odh-notebook-rocm-python-3.9" \
       summary="ROCm Python 3.9 base image for ODH notebooks" \
       description="ROCm Python 3.9 builder image based on RHEL Stream 9 for ODH notebooks" \
@@ -21,8 +23,8 @@ RUN echo "Installing softwares and packages" && micropipenv install && rm -f ./P
 
 USER 0
 
-# Copy entitlement certificates
-COPY ./etc-pki-entitlement /etc/pki/entitlement
+# # Copy entitlement certificates
+# COPY ./etc-pki-entitlement /etc/pki/entitlement
 
 # Install required packages 
 RUN yum -y install git java-1.8.0-openjdk && \
