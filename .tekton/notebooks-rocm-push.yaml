@@ -168,8 +168,8 @@ spec:
     - name: generate-odcs-compose
       runAfter: [prep-inputs]
       workspaces:
-        - name: workdir
-          workspace: workdir
+        - name: workspace
+          workspace: workspace
       params: 
       - name: COMPOSE_INPUTS
         value: amd/rhel9-python-3.9/compose_inputs.yaml
@@ -187,11 +187,11 @@ spec:
     - name: check-results
       runAfter: [generate-odcs-compose]
       workspaces:
-        - name: workdir
-          workspace: workdir
+        - name: workspace
+          workspace: workspace
       taskSpec:
         workspaces:
-          - name: workdir
+          - name: workspace
             description: \
               Working directory that will be used for reading configuration
               files and writing the output
