@@ -7,7 +7,6 @@ Open Data Hub contains the following workbench images with different variations:
 | -------------------------- | ------- | ------------ | ------ | ------- | -------- |
 | Jupyter Minimal            | &#9745; | &#9745;      | UBI8/9 | &#9746; | &#9746;  |
 | CUDA                       | &#9745; | &#9745;      | UBI8/9 | &#9745; | &#9746;  |
-| HabanaAI                   | &#9745; | &#9746;      | UBI8/9 | &#9745; | &#9746;  |
 | Jupyter Data Science       | &#9745; | &#9745;      | UBI8/9 | &#9746; | &#9745;  |
 | Jupyter Tensorflow         | &#9745; | &#9745;      | UBI8/9 | &#9745; | &#9745;  |
 | Jupyter PyTorch            | &#9745; | &#9745;      | UBI8/9 | &#9745; | &#9745;  |
@@ -31,12 +30,6 @@ If you do not require advanced machine learning features or additional resources
 CUDA provides a browser-based integrated development environment where you can write, edit, and debug code using the familiar interface and features of JupyterLab. If you are working with compute-intensive data science models that require GPU support, use the Compute Unified Device Architecture (CUDA) notebook image to gain access to the NVIDIA CUDA Toolkit. You can optimize your work using GPU-accelerated libraries and optimization tools using this toolkit.
 
 [2023b Packages](https://github.com/opendatahub-io/notebooks/blob/2023b/jupyter/minimal/ubi9-python-3.9/Pipfile) || [2023a Packages](https://github.com/opendatahub-io/notebooks/blob/2023a/jupyter/minimal/ubi9-python-3.9/Pipfile) 
-
-## HabanaAI 
-
-HabanaAI provides a browser-based integrated development environment where you can write, edit, and debug code using the familiar interface and features of JupyterLab. The HabanaAI notebook image optimizes high-performance deep learning (DL) with Habana Gaudi devices. Habana Gaudi devices accelerate DL training workloads and maximize training throughput and efficiency.
-
-[2023b Packages](https://github.com/opendatahub-io/notebooks/blob/2023b/habana/1.11.0/ubi8-python-3.8/Pipfile) || [2023a Packages](https://github.com/opendatahub-io/notebooks/blob/2023a/habana/1.10.0/ubi8-python-3.8/Pipfile) 
 
 ## Jupyter Data Science
 
