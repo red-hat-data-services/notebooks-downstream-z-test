@@ -1,0 +1,12 @@
+{
+  "display_name": "TensorFlow with ROCm and Python 3.9 (UBI9)",
+  "metadata": {
+    "tags": [
+      "rocm-tensorflow"
+    ],
+    "display_name": "TensorFlow with ROCm and Python 3.9 (UBI9)",
+    "image_name": "quay.io/modh/runtime-images@sha256:d4804691693c9a172d205fcf16eab3ef9fb4d4edb03d0665cb571189eeb3300f",
+    "pull_policy": "IfNotPresent"
+  },
+  "schema_name": "runtime-image"
+}
