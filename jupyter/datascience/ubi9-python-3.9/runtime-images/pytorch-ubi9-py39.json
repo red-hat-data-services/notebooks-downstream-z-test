@@ -5,7 +5,7 @@
       "pytorch"
     ],
     "display_name": "Pytorch with CUDA and Python 3.9 (UBI9)",
-    "image_name": "quay.io/modh/runtime-images@sha256:3eefa5d7e49bc762070bfbe8ce2025350b335146b8338589148585e939fe313c",
+    "image_name": "quay.io/modh/runtime-images@sha256:c89f94f00baee8bbb930c3c1bd077acf10e707c898942daf34729ae53da77c11",
     "pull_policy": "IfNotPresent"
   },
   "schema_name": "runtime-image"

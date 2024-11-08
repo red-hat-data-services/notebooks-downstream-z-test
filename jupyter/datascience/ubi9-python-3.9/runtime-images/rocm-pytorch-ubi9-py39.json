@@ -5,7 +5,7 @@
       "rocm-pytorch"
     ],
     "display_name": "Pytorch with ROCm and Python 3.9 (UBI9)",
-    "image_name": "quay.io/modh/runtime-images@sha256:59cce2371639b81a6b4f114da91da31f968b3c76a9110d0cf53e8863970e18e9",
+    "image_name": "quay.io/modh/runtime-images@sha256:34192c2201c9459256ac84a59e05b57b1f458bc51a82dd1d6c85b2992029a4dc",
     "pull_policy": "IfNotPresent"
   },
   "schema_name": "runtime-image"
