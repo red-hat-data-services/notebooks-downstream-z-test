@@ -5,7 +5,7 @@
       "datascience"
     ],
     "display_name": "Datascience with Python 3.9 (UBI9)",
-    "image_name": "quay.io/modh/runtime-images@sha256:c5563e20a1d94cea26391a4e0cca6ef79b953571b3ce65f77a568014cbb4fb82",
+    "image_name": "quay.io/modh/runtime-images@sha256:682af2e8f52f2e2a5313851891e8e1d4909c81322e5afcff1b2d139ee8610b51",
     "pull_policy": "IfNotPresent"
   },
   "schema_name": "runtime-image"
