@@ -5,11 +5,7 @@
       "datascience"
     ],
     "display_name": "Datascience with Python 3.8 (UBI8)",
-<<<<<<< HEAD
     "image_name": "quay.io/modh/runtime-images@sha256:705a3d87b3df961d69beeabaf1cd254bf5b696ef9a1e17843f3527f39962b799",
-=======
-    "image_name": "quay.io/opendatahub/workbench-images@sha256:d1b5ba3d2d4a0d3ddd86f8ca5e52bc0e30f841b3352d04bedc7d4de2498063d3",
->>>>>>> fbadad2f83364803ae11d995fc2e318342fd404e
     "pull_policy": "IfNotPresent"
   },
   "schema_name": "runtime-image"
