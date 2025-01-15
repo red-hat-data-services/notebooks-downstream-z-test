@@ -1,3 +1,18 @@
+# https://tech.davis-hansson.com/p/make/
+SHELL := bash
+# todo: do not set .ONESHELL: for now
+# http://redsymbol.net/articles/unofficial-bash-strict-mode/
+#.SHELLFLAGS := -eu -o pipefail -c
+.DELETE_ON_ERROR:
+MAKEFLAGS += --warn-undefined-variables
+MAKEFLAGS += --no-builtin-rules
+
+# todo: leave the default recipe prefix for now
+ifeq ($(origin .RECIPEPREFIX), undefined)
+  $(error This Make does not support .RECIPEPREFIX. Please use GNU Make 4.0 or later)
+endif
+.RECIPEPREFIX =
+
 IMAGE_REGISTRY   ?= quay.io/opendatahub/workbench-images
 RELEASE	 		 ?= 2024a
 # additional user-specified caching parameters for $(CONTAINER_ENGINE) build
@@ -16,10 +31,13 @@ else
 	WHERE_WHICH ?= which
 endif
 
+# linux/amd64 or darwin/arm64
+OS_ARCH=$(shell go env GOOS)/$(shell go env GOARCH)
+
 IMAGE_TAG		 ?= $(RELEASE)_$(DATE)
 KUBECTL_BIN      ?= bin/kubectl
 KUBECTL_VERSION  ?= v1.23.11
-NOTEBOOK_REPO_BRANCH_BASE ?= https://raw.githubusercontent.com/opendatahub-io/notebooks/main
+NOTEBOOK_REPO_BRANCH_BASE ?= https://raw.githubusercontent.com/opendatahub-io/notebooks/2024a
 REQUIRED_RUNTIME_IMAGE_COMMANDS="curl python3"
 REQUIRED_CODE_SERVER_IMAGE_COMMANDS="curl python oc code-server"
 REQUIRED_R_STUDIO_IMAGE_COMMANDS="curl python oc /usr/lib/rstudio-server/bin/rserver"
@@ -326,7 +344,7 @@ jupyter-datascience-anaconda-python-3.8: base-anaconda-python-3.8
 bin/kubectl:
 ifeq (,$(wildcard $(KUBECTL_BIN)))
 	@mkdir -p bin
-	@curl -sSL https://dl.k8s.io/release/$(KUBECTL_VERSION)/bin/linux/amd64/kubectl > \
+	@curl -sSL https://dl.k8s.io/release/$(KUBECTL_VERSION)/bin/$(OS_ARCH)/kubectl > \
 		$(KUBECTL_BIN)
 	@chmod +x $(KUBECTL_BIN)
 endif
@@ -431,8 +449,8 @@ test-%: bin/kubectl
 	$(KUBECTL_BIN) wait --for=condition=ready pod -l app=$(NOTEBOOK_NAME) --timeout=600s
 	$(KUBECTL_BIN) port-forward svc/$(NOTEBOOK_NAME)-notebook 8888:8888 & curl --retry 5 --retry-delay 5 --retry-connrefused http://localhost:8888/notebook/opendatahub/jovyan/api ; EXIT_CODE=$$?; echo && pkill --full "^$(KUBECTL_BIN).*port-forward.*"; \
 	$(eval FULL_NOTEBOOK_NAME = $(shell ($(KUBECTL_BIN) get pods -l app=$(NOTEBOOK_NAME) -o custom-columns=":metadata.name" | tr -d '\n')))
-	
-	# Tests notebook's functionalities 
+
+	# Tests notebook's functionalities
 	if echo "$(FULL_NOTEBOOK_NAME)" | grep -q "minimal-ubi9"; then \
 		$(call test_with_papermill,minimal,ubi9,python-3.9) \
 	elif echo "$(FULL_NOTEBOOK_NAME)" | grep -q "intel-tensorflow-ubi9"; then \
@@ -572,34 +590,82 @@ validate-rstudio-image: bin/kubectl
 	fi; \
 
 
-# This is only for the workflow action
+# This recipe used mainly from the Pipfile.locks Renewal Action
+# Default Python version
+PYTHON_VERSION ?= 3.9
+ROOT_DIR := $(shell pwd)
+BASE_DIRS := base/anaconda-python-$(PYTHON_VERSION) \
+		base/c9s-python-$(PYTHON_VERSION) \
+		base/ubi8-python-$(PYTHON_VERSION) \
+		base/ubi9-python-$(PYTHON_VERSION) \
+		codeserver/ubi9-python-$(PYTHON_VERSION) \
+		cuda/c9s-python-$(PYTHON_VERSION) \
+		cuda/ubi8-python-$(PYTHON_VERSION) \
+		cuda/ubi9-python-$(PYTHON_VERSION) \
+		habana/1.10.0/ubi8-python-$(PYTHON_VERSION) \
+		habana/1.13.0/ubi8-python-$(PYTHON_VERSION) \
+		jupyter/datascience/anaconda-python-$(PYTHON_VERSION) \
+		jupyter/datascience/ubi8-python-$(PYTHON_VERSION) \
+		jupyter/datascience/ubi9-python-$(PYTHON_VERSION) \
+		jupyter/minimal/ubi8-python-$(PYTHON_VERSION) \
+		jupyter/minimal/ubi9-python-$(PYTHON_VERSION) \
+		jupyter/pytorch/ubi9-python-$(PYTHON_VERSION) \
+		jupyter/rocm/pytorch/ubi9-python-$(PYTHON_VERSION) \
+		jupyter/rocm/tensorflow/ubi9-python-$(PYTHON_VERSION) \
+		jupyter/tensorflow/ubi9-python-$(PYTHON_VERSION) \
+		jupyter/trustyai/ubi9-python-$(PYTHON_VERSION) \
+		rocm/ubi9-python-$(PYTHON_VERSION) \
+		rstudio/c9s-python-$(PYTHON_VERSION) \
+		rstudio/rhel9-python-3$(PYTHON_VERSION) \
+		runtimes/datascience/ubi8-python-$(PYTHON_VERSION) \
+		runtimes/datascience/ubi9-python-$(PYTHON_VERSION) \
+		runtimes/minimal/ubi8-python-$(PYTHON_VERSION) \
+		runtimes/minimal/ubi9-python-$(PYTHON_VERSION) \
+		runtimes/pytorch/ubi8-python-$(PYTHON_VERSION) \
+		runtimes/pytorch/ubi9-python-$(PYTHON_VERSION) \
+		runtimes/rocm-pytorch/ubi9-python-$(PYTHON_VERSION) \
+		runtimes/rocm-tensorflow/ubi9-python-$(PYTHON_VERSION) \
+		runtimes/tensorflow/ubi8-python-$(PYTHON_VERSION) \
+		runtimes/tensorflow/ubi9-python-$(PYTHON_VERSION)
+
+# Default value is false, can be overiden
+# The below directories are not supported on tier-1
+INCLUDE_OPT_DIRS ?= false
+OPT_DIRS := intel/base/gpu/ubi9-python-$(PYTHON_VERSION) \
+		intel/runtimes/ml/ubi9-python-$(PYTHON_VERSION) \
+		intel/runtimes/pytorch/ubi9-python-$(PYTHON_VERSION) \
+		intel/runtimes/tensorflow/ubi9-python-$(PYTHON_VERSION) \
+		jupyter/intel/ml/ubi9-python-$(PYTHON_VERSION) \
+		jupyter/intel/pytorch/ubi9-python-$(PYTHON_VERSION) \
+		jupyter/intel/tensorflow/ubi9-python-$(PYTHON_VERSION)
+
+# This recipe gets args, can be used like
+# make refresh-pipfilelock-files PYTHON_VERSION=3.11 INCLUDE_OPT_DIRS=false
 .PHONY: refresh-pipfilelock-files
 refresh-pipfilelock-files:
-	cd base/ubi8-python-3.8 && pipenv lock
-	cd base/ubi9-python-3.9 && pipenv lock
-	cd base/c9s-python-3.9 && pipenv lock
-	cd jupyter/minimal/ubi8-python-3.8 && pipenv lock
-	cd jupyter/minimal/ubi9-python-3.9 && pipenv lock
-	cd jupyter/datascience/ubi8-python-3.8 && pipenv lock
-	cd jupyter/datascience/ubi9-python-3.9 && pipenv lock
-	cd jupyter/pytorch/ubi9-python-3.9 && pipenv lock
-	cd jupyter/tensorflow/ubi9-python-3.9 && pipenv lock
-	cd jupyter/trustyai/ubi9-python-3.9 && pipenv lock
-	cd habana/1.10.0/ubi8-python-3.8 && pipenv lock
-	cd habana/1.13.0/ubi8-python-3.8 && pipenv lock
-	cd runtimes/minimal/ubi8-python-3.8 && pipenv lock
-	cd runtimes/minimal/ubi9-python-3.9 && pipenv lock
-	cd runtimes/datascience/ubi8-python-3.8 && pipenv lock
-	cd runtimes/datascience/ubi9-python-3.9 && pipenv lock
-	cd runtimes/pytorch/ubi9-python-3.9 && pipenv lock
-	cd runtimes/pytorch/ubi8-python-3.8 && pipenv lock
-	cd runtimes/tensorflow/ubi8-python-3.8 && pipenv lock
-	cd runtimes/tensorflow/ubi9-python-3.9 && pipenv lock
-	cd runtimes/rocm-tensorflow/ubi9-python-3.9 && pipenv lock
-	cd runtimes/rocm-pytorch/ubi9-python-3.9 && pipenv lock
+	@echo "Updating Pipfile.lock files for Python $(PYTHON_VERSION)"
+	@if [ "$(INCLUDE_OPT_DIRS)" = "true" ]; then \
+		echo "Including optional directories"; \
+		DIRS="$(BASE_DIRS) $(OPT_DIRS)"; \
+	else \
+		DIRS="$(BASE_DIRS)"; \
+	fi; \
+	for dir in $$DIRS; do \
+		echo "Processing directory: $$dir"; \
+		cd $(ROOT_DIR); \
+		if [ -d "$$dir" ]; then \
+			echo "Updating $(PYTHON_VERSION) Pipfile.lock in $$dir"; \
+			cd $$dir; \
+			if [ -f "Pipfile" ]; then \
+				pipenv lock; \
+			else \
+				echo "No Pipfile found in $$dir, skipping."; \
+			fi; \
+		else \
+			echo "Skipping $$dir as it does not exist"; \
+		fi; \
+	done
 
-
-	
 # This is only for the workflow action
 # For running manually, set the required environment variables
 .PHONY: scan-image-vulnerabilities
