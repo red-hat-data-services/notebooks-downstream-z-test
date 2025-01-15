@@ -5,7 +5,7 @@
       "minimal"
     ],
     "display_name": "Python 3.9 (UBI9)",
-    "image_name": "quay.io/modh/runtime-images@sha256:803e2b9810c86a7fd014f4ed54a45e338b6285e11b77529f3c1566fb8fa9cae5",
+    "image_name": "quay.io/modh/runtime-images@sha256:f50f07f0f9fb84c7376457ba4f11025c617944364e534a804fc7646504cedfad",
     "pull_policy": "IfNotPresent"
   },
   "schema_name": "runtime-image"
