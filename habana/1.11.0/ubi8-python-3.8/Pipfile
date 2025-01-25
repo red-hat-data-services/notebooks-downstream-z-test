@@ -44,7 +44,7 @@ scikit-learn = "~=1.2.1"
 scipy = "~=1.10.0"
 jupyterlab-lsp = "~=3.10.2"
 jupyterlab-widgets = "~=3.0.5"
-jupyter-resource-usage = "~=0.6.0"
+jupyter-resource-usage = "~=0.7.2"
 
 # Parent image requirements to maintain cohesion
 jupyterlab = "~=3.5.3"
