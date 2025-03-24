@@ -12,7 +12,7 @@ RUN pip install --no-cache-dir -U "micropipenv[toml]"
 USER root
 
 # Install usefull OS packages
-RUN dnf install -y mesa-libGL && dnf clean all && rm -rf /var/cache/yum
+RUN dnf install -y mesa-libGL skopeo && dnf clean all && rm -rf /var/cache/yum
 
 # Other apps and tools installed as default user
 USER 1001
@@ -41,8 +41,9 @@ ARG BASEURL_DEFAULT=""
 USER 0
 WORKDIR /opt/app-root/bin
 
-# Run the subscription manager command using the provided credentials. Only include --serverurl and --baseurl if they are provided
-RUN SERVERURL=$(cat ${SECRET_DIR}/SERVERURL 2>/dev/null || echo ${SERVERURL_DEFAULT}) && \
+# If necessary, run the subscription manager command using the provided credentials. Only include --serverurl and --baseurl if they are provided
+RUN if [ -d "${SECRET_DIR}" ]; then \
+    SERVERURL=$(cat ${SECRET_DIR}/SERVERURL 2>/dev/null || echo ${SERVERURL_DEFAULT}) && \
     BASEURL=$(cat ${SECRET_DIR}/BASEURL 2>/dev/null || echo ${BASEURL_DEFAULT}) && \
     USERNAME=$(cat ${SECRET_DIR}/USERNAME) && \
     PASSWORD=$(cat ${SECRET_DIR}/PASSWORD) && \
@@ -52,7 +53,8 @@ RUN SERVERURL=$(cat ${SECRET_DIR}/SERVERURL 2>/dev/null || echo ${SERVERURL_DEFA
     --username=$USERNAME \
     --password=$PASSWORD \
     --force \
-    --auto-attach
+    --auto-attach; \
+  fi
 
 ENV NVARCH=x86_64
 ENV NVIDIA_REQUIRE_CUDA="cuda>=12.4 brand=tesla,driver>=470,driver<471 brand=unknown,driver>=470,driver<471 brand=nvidia,driver>=470,driver<471 brand=nvidiartx,driver>=470,driver<471 brand=geforce,driver>=470,driver<471 brand=geforcertx,driver>=470,driver<471 brand=quadro,driver>=470,driver<471 brand=quadrortx,driver>=470,driver<471 brand=titan,driver>=470,driver<471 brand=titanrtx,driver>=470,driver<471 brand=tesla,driver>=525,driver<526 brand=unknown,driver>=525,driver<526 brand=nvidia,driver>=525,driver<526 brand=nvidiartx,driver>=525,driver<526 brand=geforce,driver>=525,driver<526 brand=geforcertx,driver>=525,driver<526 brand=quadro,driver>=525,driver<526 brand=quadrortx,driver>=525,driver<526 brand=titan,driver>=525,driver<526 brand=titanrtx,driver>=525,driver<526 brand=tesla,driver>=535,driver<536 brand=unknown,driver>=535,driver<536 brand=nvidia,driver>=535,driver<536 brand=nvidiartx,driver>=535,driver<536 brand=geforce,driver>=535,driver<536 brand=geforcertx,driver>=535,driver<536 brand=quadro,driver>=535,driver<536 brand=quadrortx,driver>=535,driver<536 brand=titan,driver>=535,driver<536 brand=titanrtx,driver>=535,driver<536"
@@ -165,7 +167,9 @@ RUN yum -y install cuda-toolkit-12-4 && \
     yum -y clean all --enablerepo="*"
 
 # Unregister the system
-RUN subscription-manager remove --all && subscription-manager unregister && subscription-manager clean
+RUN if [ -d "${SECRET_DIR}" ]; then \
+    subscription-manager remove --all && subscription-manager unregister && subscription-manager clean; \
+  fi
 
 # Restore notebook user workspace
 USER 1001
@@ -197,8 +201,9 @@ USER 0
 # uncomment the below line if you fall on this error: subscription-manager is disabled when running inside a container. Please refer to your host system for subscription management.
 #RUN sed -i 's/\(def in_container():\)/\1\n    return False/g' /usr/lib64/python*/*-packages/rhsm/config.py
 
-# Run the subscription manager command using the provided credentials. Only include --serverurl and --baseurl if they are provided
-RUN SERVERURL=$(cat ${SECRET_DIR}/SERVERURL 2>/dev/null || echo ${SERVERURL_DEFAULT}) && \
+# If necessary, run the subscription manager command using the provided credentials. Only include --serverurl and --baseurl if they are provided
+RUN if [ -d "${SECRET_DIR}" ]; then \
+    SERVERURL=$(cat ${SECRET_DIR}/SERVERURL 2>/dev/null || echo ${SERVERURL_DEFAULT}) && \
     BASEURL=$(cat ${SECRET_DIR}/BASEURL 2>/dev/null || echo ${BASEURL_DEFAULT}) && \
     USERNAME=$(cat ${SECRET_DIR}/USERNAME) && \
     PASSWORD=$(cat ${SECRET_DIR}/PASSWORD) && \
@@ -208,9 +213,10 @@ RUN SERVERURL=$(cat ${SECRET_DIR}/SERVERURL 2>/dev/null || echo ${SERVERURL_DEFA
     --username=$USERNAME \
     --password=$PASSWORD \
     --force \
-    --auto-attach
+    --auto-attach; \
+  fi
 
-ENV R_VERSION=4.4.1
+ENV R_VERSION=4.4.3
 
 # Install R
 RUN yum install -y yum-utils && \
@@ -224,30 +230,33 @@ RUN yum install -y yum-utils && \
     yum -y clean all --enablerepo='*'
 
 # set R library to default (used in install.r from littler)
-RUN chmod -R a+w /usr/lib64/R/library
 ENV LIBLOC=/usr/lib64/R/library
-
-# set User R Library path
-RUN mkdir -p /opt/app-root/bin/Rpackages/4.4 && chmod -R a+w /opt/app-root/bin/Rpackages/4.4
 ENV R_LIBS_USER=/opt/app-root/bin/Rpackages/4.4
+
+RUN chmod -R a+w ${LIBLOC} && \
+    # create User R Library path
+    mkdir -p ${R_LIBS_USER} && \
+    chmod -R a+w ${R_LIBS_USER}
 
 WORKDIR /tmp/
 
 # Install RStudio
-RUN wget --progress=dot:giga https://download2.rstudio.org/server/rhel9/x86_64/rstudio-server-rhel-2024.04.2-764-x86_64.rpm && \
-    yum install -y rstudio-server-rhel-2024.04.2-764-x86_64.rpm && \
-    rm rstudio-server-rhel-2024.04.2-764-x86_64.rpm && \
-    yum -y clean all  --enablerepo='*'
+ARG RSTUDIO_RPM=rstudio-server-rhel-2024.12.1-563-x86_64.rpm
+RUN wget --progress=dot:giga https://download2.rstudio.org/server/rhel9/x86_64/${RSTUDIO_RPM} && \
+    yum install -y ${RSTUDIO_RPM} && \
+    rm ${RSTUDIO_RPM} && \
+    yum -y clean all  --enablerepo='*' &&\
+    # Specific RStudio config and fixes \
+    chmod 1777 /var/run/rstudio-server && \
+    mkdir -p /usr/share/doc/R && \
+    # package installation \
+    # install necessary texlive-framed package to make Knit R markup to PDF rendering possible \
+    dnf install -y libsodium-devel.x86_64 libgit2-devel.x86_64 libcurl-devel harfbuzz-devel.x86_64 fribidi-devel.x86_64 cmake "flexiblas-*" texlive-framed && \
+    dnf clean all && \
+    rm -rf /var/cache/yum
 
-# Specific RStudio config and fixes
-RUN chmod 1777 /var/run/rstudio-server && \
-    mkdir -p /usr/share/doc/R
 COPY ${RSTUDIO_SOURCE_CODE}/rsession.conf /etc/rstudio/rsession.conf
 
-# package installation
-# install necessary texlive-framed package to make Knit R markup to PDF rendering possible
-RUN dnf install -y libsodium-devel.x86_64 libgit2-devel.x86_64 libcurl-devel harfbuzz-devel.x86_64 fribidi-devel.x86_64 cmake "flexiblas-*" texlive-framed \
-    && dnf clean all && rm -rf /var/cache/yum
 # Install R packages
 RUN R -e "install.packages('Rcpp')"
 
@@ -315,7 +324,9 @@ COPY ${RSTUDIO_SOURCE_CODE}/utils utils/
 COPY ${RSTUDIO_SOURCE_CODE}/run-rstudio.sh ${RSTUDIO_SOURCE_CODE}/setup_rstudio.py ${RSTUDIO_SOURCE_CODE}/rsession.sh ${RSTUDIO_SOURCE_CODE}/run-nginx.sh ./
 
 # Unregister the system
-RUN subscription-manager remove --all && subscription-manager unregister && subscription-manager clean
+RUN if [ -d "${SECRET_DIR}" ]; then \
+    subscription-manager remove --all && subscription-manager unregister && subscription-manager clean; \
+  fi
 
 USER 1001
 

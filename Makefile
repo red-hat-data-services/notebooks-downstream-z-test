@@ -94,6 +94,7 @@ endef
 #
 # PUSH_IMAGES: allows skipping podman push
 define image
+	$(info #*# Image build Dockerfile: <$(2)> #(MACHINE-PARSED LINE)#*#...)
 	$(eval BUILD_DIRECTORY := $(shell echo $(2) | sed 's/\/Dockerfile.*//'))
 	$(info #*# Image build directory: <$(BUILD_DIRECTORY)> #(MACHINE-PARSED LINE)#*#...)
 
@@ -107,7 +108,7 @@ endef
 #######################################        Build helpers                 #######################################
 
 # https://stackoverflow.com/questions/78899903/how-to-create-a-make-target-which-is-an-implicit-dependency-for-all-other-target
-skip-init-for := all-images deploy% undeploy% test% scan-image-vulnerabilities
+skip-init-for := all-images deploy% undeploy% test% validate% refresh-pipfilelock-files scan-image-vulnerabilities
 ifneq (,$(filter-out $(skip-init-for),$(MAKECMDGOALS) $(.DEFAULT_GOAL)))
 $(SELF): bin/buildinputs
 endif
@@ -171,6 +172,16 @@ rstudio-c9s-python-$(RELEASE_PYTHON_VERSION):
 .PHONY: cuda-rstudio-c9s-python-$(RELEASE_PYTHON_VERSION)
 cuda-rstudio-c9s-python-$(RELEASE_PYTHON_VERSION):
 	$(call image,$@,rstudio/c9s-python-$(RELEASE_PYTHON_VERSION)/Dockerfile.cuda)
+
+####################################### Buildchain for Python using rhel9 #######################################
+
+.PHONY: rstudio-rhel9-python-$(RELEASE_PYTHON_VERSION)
+rstudio-rhel9-python-$(RELEASE_PYTHON_VERSION):
+	$(call image,$@,rstudio/rhel9-python-$(RELEASE_PYTHON_VERSION)/Dockerfile.cpu)
+
+.PHONY: cuda-rstudio-rhel9-python-$(RELEASE_PYTHON_VERSION)
+cuda-rstudio-rhel9-python-$(RELEASE_PYTHON_VERSION):
+	$(call image,$@,rstudio/rhel9-python-$(RELEASE_PYTHON_VERSION)/Dockerfile.cuda)
 
 ####################################### Buildchain for AMD Python using UBI9 #######################################
 .PHONY: rocm-jupyter-minimal-ubi9-python-$(RELEASE_PYTHON_VERSION)
@@ -438,6 +449,8 @@ all-images: jupyter-minimal-ubi9-python-$(RELEASE_PYTHON_VERSION) \
 	codeserver-ubi9-python-$(RELEASE_PYTHON_VERSION) \
 	rstudio-c9s-python-$(RELEASE_PYTHON_VERSION) \
 	cuda-rstudio-c9s-python-$(RELEASE_PYTHON_VERSION) \
+	rstudio-rhel9-python-$(RELEASE_PYTHON_VERSION) \
+	cuda-rstudio-rhel9-python-$(RELEASE_PYTHON_VERSION) \
 	rocm-jupyter-minimal-ubi9-python-$(RELEASE_PYTHON_VERSION) \
 	rocm-jupyter-tensorflow-ubi9-python-$(RELEASE_PYTHON_VERSION) \
 	rocm-jupyter-pytorch-ubi9-python-$(RELEASE_PYTHON_VERSION) \
