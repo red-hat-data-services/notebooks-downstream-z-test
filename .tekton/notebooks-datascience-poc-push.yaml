@@ -9,7 +9,9 @@ metadata:
     pipelinesascode.tekton.dev/max-keep-runs: "3"
     pipelinesascode.tekton.dev/on-cel-expression: event == "push" && target_branch
       == "ide-poc"
-      && ( !".tekton/**".pathChanged() || ".tekton/notebooks-datascience-poc-push.yaml".pathChanged() )
+      && ( !".tekton/**".pathChanged() || 
+      ".tekton/notebooks-datascience-poc-push.yaml".pathChanged() ||
+      jupyter/datascience/ubi9-python-3.11/Dockerfile.cpu.pathChanged() )
   creationTimestamp: null
   labels:
     appstudio.openshift.io/application: notebooks
