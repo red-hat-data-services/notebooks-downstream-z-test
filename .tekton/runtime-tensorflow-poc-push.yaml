@@ -21,6 +21,8 @@ metadata:
   name: runtime-tensorflow-poc-on-push
   namespace: rhoai-tenant
 spec:
+  timeouts:
+    pipeline: 8h
   params:
   - name: git-url
     value: '{{source_url}}'
