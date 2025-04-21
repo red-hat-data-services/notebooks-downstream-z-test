@@ -11,7 +11,7 @@ metadata:
       == "ide-poc"
       && ( 
       ".tekton/notebooks-pytorch-poc-push.yaml".pathChanged() ||
-      jupyter/pytorch/ubi9-python-3.11/Dockerfile.cuda.pathChanged() )
+      "jupyter/pytorch/ubi9-python-3.11/Dockerfile.cuda".pathChanged() )
   creationTimestamp: null
   labels:
     appstudio.openshift.io/application: notebooks

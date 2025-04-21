@@ -9,7 +9,7 @@ metadata:
     pipelinesascode.tekton.dev/max-keep-runs: "3"
     pipelinesascode.tekton.dev/on-cel-expression: event == "push" && target_branch
       == "ide-poc"
-      && ( !".tekton/**".pathChanged() || 
+      && (
       ".tekton/notebooks-trustyai-poc-push.yaml".pathChanged() ||
       "jupyter/trustyai/ubi9-python-3.11/Dockerfile.cpu".pathChanged() )
   creationTimestamp: null
