@@ -325,6 +325,12 @@ spec:
         values:
         - "false"
     - name: clair-scan
+      computeResources:
+        requests:
+          cpu: '1'
+          memory: 2Gi
+        limits:
+          memory: 2Gi
       params:
       - name: image-digest
         value: $(tasks.build-image-index.results.IMAGE_DIGEST)
