@@ -12,7 +12,8 @@ metadata:
       == "ide-poc"
       && (
       ".tekton/runtime-tensorflow-poc-push.yaml".pathChanged() ||
-      "runtimes/tensorflow/ubi9-python-3.11/Dockerfile.cuda".pathChanged() )
+      "runtimes/tensorflow/ubi9-python-3.11".pathChanged() ||
+      "jupyter/utils".pathChanged())
   creationTimestamp: null
   labels:
     appstudio.openshift.io/application: notebooks
