@@ -12,7 +12,8 @@ metadata:
       == "ide-poc"
       && ( 
       ".tekton/notebooks-datascience-poc-push.yaml".pathChanged() ||
-      "jupyter/datascience/ubi9-python-3.11/Dockerfile.cpu".pathChanged() )
+      "jupyter/datascience/ubi9-python-3.11/Dockerfile.cpu".pathChanged() 
+      "jupyter/utils".pathChanged())
   creationTimestamp: null
   labels:
     appstudio.openshift.io/application: notebooks
