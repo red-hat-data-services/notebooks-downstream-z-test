@@ -14,7 +14,6 @@ metadata:
       && ( ".tekton/odh-workbench-jupyter-minimal-rocm-py311-ubi9-n-v2-21-push.yaml".pathChanged() || 
            "jupyter/utils/**".pathChanged() || 
            "jupyter/minimal/ubi9-python-3.11/**".pathChanged() )
-      
   creationTimestamp: null
   labels:
     appstudio.openshift.io/application: external-rhoai-v2-21
