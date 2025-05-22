@@ -12,8 +12,8 @@ metadata:
       event == "push"
       && target_branch == "rhoai-2.21"
       && ( "runtimes/datascience/ubi9-python-3.11/**".pathChanged() || 
-           ".tekton/odh-pipeline-runtime-datascience-cpu-py311-ubi9-n-v2-21-push.yaml".pathChanged() ||
-           !("manifests/base/params-latest.env".pathChanged()) )
+           ".tekton/odh-pipeline-runtime-datascience-cpu-py311-ubi9-n-v2-21-push.yaml".pathChanged() )
+      && !("manifests/base/params-latest.env".pathChanged())
   creationTimestamp: null
   labels:
     appstudio.openshift.io/application: external-rhoai-v2-21
