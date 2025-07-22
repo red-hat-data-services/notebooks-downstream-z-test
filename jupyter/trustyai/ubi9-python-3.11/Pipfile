@@ -4,7 +4,7 @@ verify_ssl = true
 name = "pypi"
 
 [[source]]
-url = "https://download.pytorch.org/whl/cu121"
+url = "https://download.pytorch.org/whl/cu124"
 verify_ssl = true
 name = "pytorch"
 
@@ -12,7 +12,7 @@ name = "pytorch"
 
 [packages]
 # PyTorch packages
-torch = {version = "~=2.2.1", index = "pytorch"}
+torch = {version = "~=2.6.0", index = "pytorch"}
 # TrustyAI packages
 transformers = "~=4.38.0"
 datasets = "~=2.21.0"
@@ -37,7 +37,7 @@ kubeflow-training = "==1.8.1"
 pymongo = "~=4.8.0"
 psycopg = "~=3.2.1"
 pyodbc = "~=5.1.0"
-mysql-connector-python = "~=9.0.0"
+mysql-connector-python = "~=9.1.0"
 
 # JupyterLab packages
 odh-elyra = "==4.2.0"
@@ -56,7 +56,7 @@ nbgitpuller = "~=1.2.1"
 
 # Base packages
 wheel = "~=0.44.0"
-setuptools = "~=74.1.2"
+setuptools = "~=78.1.1"
 
 [requires]
 python_version = "3.11"

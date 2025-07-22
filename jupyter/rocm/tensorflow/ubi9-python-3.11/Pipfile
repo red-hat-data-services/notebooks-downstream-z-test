@@ -29,7 +29,7 @@ codeflare-sdk = "~=0.24.0"
 pymongo = "~=4.8.0"
 psycopg = "~=3.2.1"
 pyodbc = "~=5.1.0"
-mysql-connector-python = "~=9.0.0"
+mysql-connector-python = "~=9.1.0"
 
 # JupyterLab packages
 
@@ -49,7 +49,7 @@ nbgitpuller = "~=1.2.1"
 
 # Base packages
 wheel = "~=0.44.0"
-setuptools = "~=74.1.2"
+setuptools = "~=78.1.1"
 
 [requires]
 python_version = "3.11"
