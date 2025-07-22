@@ -18,10 +18,7 @@ name: Build & Publish Notebook Servers (TEMPLATE)
 
 jobs:
   build:
-    strategy:
-      matrix:
-        os: [ubuntu-22.04]
-    runs-on: ${{matrix.os}}
+    runs-on: ubuntu-24.04
     env:
       # Some pieces of code (image pulls for example) in podman consult TMPDIR or default to /var/tmp
       TMPDIR: /home/runner/.local/share/containers/tmpdir
@@ -145,6 +142,10 @@ jobs:
           # remote (CONTAINER_HOST) podman does not do reset (and refuses --force option)
           sudo /home/linuxbrew/.linuxbrew/opt/podman/bin/podman system reset --force
 
+          # https://github.com/containers/podman/pull/25504
+          # podman 5.5.0: The podman system reset command no longer removes the user's podman.sock API socket
+          sudo rm -rf /var/run/podman
+
           # https://github.com/containers/podman/blob/main/docs/tutorials/socket_activation.md
           # since `brew services start podman` is buggy, let's do our own brew-compatible service
           # Regarding directory paths, see https://unix.stackexchange.com/questions/224992/where-do-i-put-my-systemd-unit-file
@@ -163,7 +164,12 @@ jobs:
 
       - name: Show error logs (on failure)
         if: ${{ failure() }}
-        run: journalctl -xe
+        run: |
+          set -Eeuxo pipefail
+
+          journalctl -xe
+          ls -AlF /var/run/podman/podman.sock || echo "Socket /var/run/podman/podman.sock not found"
+          sudo ss -xlpn | grep 'podman.sock' || echo "No active listener found for podman.sock via ss"
 
       - name: Calculate image name and tag
         id: calculated_vars
@@ -337,20 +343,23 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y software-properties-common curl
 
+          # https://github.com/cri-o/packaging?tab=readme-ov-file#distributions-using-deb-packages
+
           curl -fsSL https://pkgs.k8s.io/core:/stable:/$KUBERNETES_VERSION/deb/Release.key | \
             sudo gpg --dearmor --batch --yes -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
 
           echo "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/$KUBERNETES_VERSION/deb/ /" | \
             sudo tee /etc/apt/sources.list.d/kubernetes.list
 
-          curl -fsSL https://pkgs.k8s.io/addons:/cri-o:/stable:/$CRIO_VERSION/deb/Release.key | \
+          curl -fsSL https://download.opensuse.org/repositories/isv:/cri-o:/stable:/$CRIO_VERSION/deb/Release.key | \
             sudo gpg --dearmor --batch --yes -o /etc/apt/keyrings/cri-o-apt-keyring.gpg
 
-          echo "deb [signed-by=/etc/apt/keyrings/cri-o-apt-keyring.gpg] https://pkgs.k8s.io/addons:/cri-o:/stable:/$CRIO_VERSION/deb/ /" | \
+          echo "deb [signed-by=/etc/apt/keyrings/cri-o-apt-keyring.gpg] https://download.opensuse.org/repositories/isv:/cri-o:/stable:/$CRIO_VERSION/deb/ /" | \
             sudo tee /etc/apt/sources.list.d/cri-o.list
 
           sudo apt-get update
-          sudo apt-get install -y cri-o kubelet kubeadm kubectl
+          # [ERROR FileExisting-conntrack]: conntrack not found in system path
+          sudo apt-get install -y cri-o kubelet kubeadm kubectl conntrack
 
           # make use of /etc/cni/net.d/11-crio-ipv4-bridge.conflist so we don't
           # need a pod network and just use the default bridge
@@ -364,8 +373,12 @@ jobs:
 
           sudo systemctl start crio.service
         env:
-          CRIO_VERSION: v1.30
-          KUBERNETES_VERSION: v1.30
+          CRIO_VERSION: v1.32
+          # This has to be kept in sync with the packages above, otherwise
+          # [ERROR KubeletVersion]: the kubelet version is higher than the control plane version.
+          #  This is not a supported version skew and may lead to a malfunctional cluster.
+          #  Kubelet version: "1.33.0" Control plane version: "1.30.12"
+          KUBERNETES_VERSION: v1.33
 
       - name: Show crio debug data (on failure)
         if: ${{ failure() && steps.have-tests.outputs.tests == 'true' }}
@@ -523,7 +536,7 @@ jobs:
             --volume ${PODMAN_SOCK}:/var/run/docker.sock \
             --volume ${PWD}:/mnt \
             --volume /mnt/node_modules \
-            mcr.microsoft.com/playwright:v1.48.1-noble \
+            mcr.microsoft.com/playwright:v1.53.1-noble \
             /bin/bash <<EOF
               set -Eeuxo pipefail
               cd /mnt
