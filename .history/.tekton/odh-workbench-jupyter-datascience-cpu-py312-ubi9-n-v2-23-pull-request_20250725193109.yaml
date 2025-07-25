@@ -11,15 +11,16 @@ metadata:
       event == "pull_request"
       && target_branch == "rhoai-2.23-multi-arch-poc"
       && !("manifests/base/params-latest.env".pathChanged())
-      && ( "runtimes/datascience/ubi9-python-3.12/**".pathChanged() ||
-           ".tekton/odh-pipeline-runtime-datascience-cpu-py312-ubi9-n-v2-23-pull-request.yaml".pathChanged() )
-
+      && ( ".tekton/odh-workbench-jupyter-datascience-cpu-py312-ubi9-n-v2-23-pull-request.yaml".pathChanged() ||
+           "jupyter/utils/**".pathChanged() ||
+           "jupyter/minimal/ubi9-python-3.12/**".pathChanged() ||
+           "jupyter/minimal/ubi9-python-3.12/start-notebook.sh".pathChanged() )
   creationTimestamp: null
   labels:
     appstudio.openshift.io/application: external-rhoai-v2-23-multi-arch-poc
-    appstudio.openshift.io/component: odh-pipeline-runtime-ds-cpu-py312-ubi9-n-v2-23-multi-arch-poc
+    appstudio.openshift.io/component: odh-workbench-jupyter-datascience-cpu-py312-ubi9-n-v2-23-multi-arch-poc
     pipelines.appstudio.openshift.io/type: build
-  name: odh-pipeline-runtime-ds-cpu-py312-ubi9-n-v2-23-multi-arch-poc-on-pull-request
+  name: odh-workbench-jup-ds-cpu-py312-ubi9-n-v2-23-multi-arch-poc-on-pull-request
   namespace: rhoai-tenant
 spec:
   params:
@@ -35,7 +36,7 @@ spec:
     - 'on-pr-{{pull_request_number}}'
     - 'commit_sha-{{revision}}'
   - name: output-image
-    value: quay.io/modh/odh-pipeline-runtime-datascience-cpu-py312-ubi9:{{target_branch}}
+    value: quay.io/modh/odh-workbench-jupyter-datascience-cpu-py312-ubi9:{{target_branch}}
   - name: image-expires-after
     value: 30d
   - name: build-platforms
@@ -45,7 +46,7 @@ spec:
     - linux/s390x
     - linux-m2xlarge/arm64
   - name: dockerfile
-    value: runtimes/datascience/ubi9-python-3.12/Dockerfile.cpu
+    value: jupyter/datascience/ubi9-python-3.12/Dockerfile.cpu
   - name: path-context
     value: .
   - name: hermetic
@@ -68,7 +69,7 @@ spec:
     - name: pathInRepo
       value: pipelines/multi-arch-container-build.yaml
   taskRunTemplate:
-    serviceAccountName: build-pipeline-odh-pipeline-runtime-ds-cpu-py312-ubi9-n-v2-23-multi-arch-poc
+    serviceAccountName: build-pipeline-odh-wb-jup-ds-cpu-py312-ubi9-n-v2-23-multi-arch-poc
   workspaces:
   - name: git-auth
     secret:

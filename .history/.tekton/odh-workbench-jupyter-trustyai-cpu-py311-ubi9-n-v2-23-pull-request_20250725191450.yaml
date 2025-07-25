@@ -11,15 +11,19 @@ metadata:
       event == "pull_request"
       && target_branch == "rhoai-2.23-multi-arch-poc"
       && !("manifests/base/params-latest.env".pathChanged())
-      && ( "runtimes/datascience/ubi9-python-3.12/**".pathChanged() ||
-           ".tekton/odh-pipeline-runtime-datascience-cpu-py312-ubi9-n-v2-23-pull-request.yaml".pathChanged() )
-
+      && ( ".tekton/odh-workbench-jupyter-trustyai-cpu-py311-ubi9-n-v2-23-push.yaml".pathChanged() ||
+           "jupyter/trustyai/ubi9-python-3.11/**".pathChanged() ||
+           "jupyter/utils/**".pathChanged() ||
+           "jupyter/minimal/ubi9-python-3.11/start-notebook.sh".pathChanged() ||
+           "jupyter/datascience/ubi9-python-3.11/mongodb-org-6.0.repo-x86_64/**".pathChanged() ||
+           "jupyter/datascience/ubi9-python-3.11/mssql-2.23.repo-x86_64/**".pathChanged() ||
+           "jupyter/datascience/ubi9-python-3.11/setup-elyra.sh".pathChanged() )
   creationTimestamp: null
   labels:
     appstudio.openshift.io/application: external-rhoai-v2-23-multi-arch-poc
-    appstudio.openshift.io/component: odh-pipeline-runtime-ds-cpu-py312-ubi9-n-v2-23-multi-arch-poc
+    appstudio.openshift.io/component: odh-workbench-jupyter-trustyai-cpu-py311-ubi9-n-v2-23-multi-arch-poc
     pipelines.appstudio.openshift.io/type: build
-  name: odh-pipeline-runtime-ds-cpu-py312-ubi9-n-v2-23-multi-arch-poc-on-pull-request
+  name: odh-workbench-jupyter-trustyai-cpu-py311-ubi9-n-v2-23-multi-arch-poc-on-pull-request
   namespace: rhoai-tenant
 spec:
   params:
@@ -27,25 +31,13 @@ spec:
     value: '{{source_url}}'
   - name: revision
     value: '{{revision}}'
-  - name: pull_request_number
-    value: '{{pull_request_number}}'
+  - name: output-image
+    value: quay.io/modh/odh-workbench-jupyter-trustyai-cpu-py311-ubi9:{{target_branch}}
   - name: additional-tags
     value:
     - '{{target_branch}}-{{revision}}'
-    - 'on-pr-{{pull_request_number}}'
-    - 'commit_sha-{{revision}}'
-  - name: output-image
-    value: quay.io/modh/odh-pipeline-runtime-datascience-cpu-py312-ubi9:{{target_branch}}
-  - name: image-expires-after
-    value: 30d
-  - name: build-platforms
-    value:
-    - linux/x86_64
-    - linux/ppc64le
-    - linux/s390x
-    - linux-m2xlarge/arm64
   - name: dockerfile
-    value: runtimes/datascience/ubi9-python-3.12/Dockerfile.cpu
+    value: jupyter/trustyai/ubi9-python-3.11/Dockerfile.cpu
   - name: path-context
     value: .
   - name: hermetic
@@ -53,7 +45,7 @@ spec:
   - name: build-source-image
     value: false
   - name: build-image-index
-    value: true
+    value: false
   - name: rebuild
     value: true
   - name: skip-checks
@@ -66,9 +58,9 @@ spec:
     - name: revision
       value: '{{ target_branch }}'
     - name: pathInRepo
-      value: pipelines/multi-arch-container-build.yaml
+      value: pipelines/container-build.yaml
   taskRunTemplate:
-    serviceAccountName: build-pipeline-odh-pipeline-runtime-ds-cpu-py312-ubi9-n-v2-23-multi-arch-poc
+    serviceAccountName: build-pipeline-odh-workbench-jupyter-trustyai-cpu-py311-ubi9-n-v2-23
   workspaces:
   - name: git-auth
     secret:
